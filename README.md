@@ -25,7 +25,7 @@ Users should be able to:
 
 ### Links
 
-- Live Site URL: [Add live site URL here](https://store-app-git-main-mariamkilany.vercel.app/)
+- Live Site URL: [Live Site](https://store-app-git-main-mariamkilany.vercel.app/)
 
 ### Built with
 
