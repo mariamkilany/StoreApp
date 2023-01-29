@@ -19,6 +19,9 @@ header{
   display: flex;
   padding: 15px;
   color: #8d8b8b;
+  justify-content: space-between;
+  align-content: center;
+  align-items: center;
 }
 .shadow{
   height: 100%;
@@ -55,4 +58,23 @@ img{
   line-height: 20px;
   border-radius: 50%;
   display: none;
+}
+.list-group{
+  display: flex;
+  flex-direction: row;
+}
+.num .list-group-item{
+  border: none !important;
+  font-size: 13px !important;
+  padding: 5px;
+  border-radius: 10px !important;
+  justify-content: center !important;
+  -webkit-border-radius: 10px !important;
+  -moz-border-radius: 10px !important;
+  -ms-border-radius: 10px !important;
+  -o-border-radius: 10px !important;
+}
+.num .list-group{
+  display: flex;
+  flex-direction: row;
 }
