@@ -3,17 +3,72 @@ import 'bootstrap/dist/css/bootstrap.css';
 import Header from './components/Header';
 import Product from './components/Product';
 import axios from 'axios';
-import { useEffect, useState , createContext } from 'react';
+import { useEffect, useState , createContext ,useReducer } from 'react';
 
 export const AppContext =createContext(null);
 
+function HandleSelected(state,action){
+  var newArr;
+  switch(action.type){
+    case 'Increase':
+      var found=state.find((ele)=>{
+          return ele.id===action.item.id
+      })
+      if(found===undefined){
+          return [...state,{...action.item,num:1}]
+      }
+      else{
+          newArr=state.map(element => {
+              if(element.id===action.item.id){
+                  return {...action.item ,num:element.num+1} 
+              }
+              return element
+          });
+              return newArr
+        }
+    case 'Decrease':
+      newArr=state.map(element => {
+          if(element.id===action.item.id && element.num!==0){
+              return {...action.item ,num:element.num-1}
+            }
+              return element
+          });
+      newArr=newArr.filter((ele)=>ele.num!==0)
+        return newArr
+    case 'display':
+      default:
+        throw new Error();
+  }
+}
+
+function HandleTotalPrice(state,action){
+  switch(action.type){
+    case 'Increase':
+      return (+state+action.item.price).toFixed(2)
+    case 'Decrease':
+      return (+state-action.item.price).toFixed(2)
+    default:
+        throw new Error();
+  }
+}
+
+function HandleTotal(state,action){
+  switch(action.type){
+    case 'Increase':
+      return state +1;
+    case 'Decrease':
+      return state -1;
+    default:
+      throw new Error();
+  }
+}
+
 function App() {
   const [products,setProducts]=useState([])
-  const [selectedProducts,setSelected]=useState([]);
-  const [total,setTotal]=useState(0);
-  const [totalPrice,setTotalPrice]=useState(0);
   const [category,setCategory]=useState("all")
-
+  const [selectedProducts,dispatchSelected]=useReducer(HandleSelected,[])
+  const [totalPrice,dispatchTotalPrice]=useReducer(HandleTotalPrice,0)
+  const [total,dispatchTotal]=useReducer(HandleTotal,0)
   useEffect(()=>{
     axios.get('https://fakestoreapi.com/products').then((res)=>{
       setProducts(res.data)
@@ -21,7 +76,7 @@ function App() {
   },[])
 
   return (
-    <AppContext.Provider value={{selectedProducts,setSelected,totalPrice,setTotalPrice,total,setTotal}}>
+    <AppContext.Provider value={{selectedProducts,totalPrice,dispatchTotalPrice,total,dispatchSelected,dispatchTotal}}>
     <div className="App">
       <Header/>
       <div className='num row'>
@@ -42,7 +97,7 @@ function App() {
         {
         products.map(product => {
           if(category==='all'|| product.category===category){
-            return <Product props={product} key={product.id}/>
+            return <Product props={{...product}} key={product.id}/>
           }
           return ''
         })}

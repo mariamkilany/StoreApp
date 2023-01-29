@@ -15,7 +15,7 @@ import {AppContext} from '../App'
 export default function Cart() {
     const [basicModal, setBasicModal] = useState(false);
 
-    const {selectedProducts,setSelected,totalPrice,setTotalPrice,total,setTotal}=useContext(AppContext)
+    const {selectedProducts,totalPrice,total,dispatchTotalPrice,dispatchSelected,dispatchTotal}=useContext(AppContext)
 
     const toggleShow = () => setBasicModal(!basicModal);
 
@@ -47,31 +47,18 @@ export default function Cart() {
                                 <div>
                                     <button className="btn btn-light"
                                     onClick={()=>{
-                                        var newArr=selectedProducts.map(element => {
-                                            if(element.id===item.id){
-                                                return {...item ,num:element.num+1}
-                                            }
-                                            return element
-                                        });
-                                        setSelected(newArr)
-                                        setTotalPrice((+totalPrice+item.price).toFixed(2))
-                                        setTotal(total+1)
+                                        dispatchSelected({type:'Increase',item:item})
+                                        dispatchTotalPrice({type:'Increase',item:item})
+                                        dispatchTotal({type:'Increase'})
                                     }}
                                     >+</button>
                                     <span style={{margin:"10px"}} >{item.num}</span>
                                     <button className="btn btn-light"
                                     onClick={
                                         ()=>{
-                                            var newArr=selectedProducts.map(element => {
-                                            if(element.id===item.id && element.num!==0){
-                                                setTotalPrice((+totalPrice-item.price).toFixed(2))
-                                                setTotal(total-1)
-                                                return {...item ,num:element.num-1}
-                                            }
-                                            return element
-                                        });
-                                        newArr=newArr.filter((ele)=>ele.num!==0)
-                                        setSelected(newArr)
+                                        dispatchSelected({type:'Decrease',item:item})
+                                        dispatchTotalPrice({type:'Decrease',item:item})
+                                        dispatchTotal({type:'Decrease'})
                                         }
                                     }
                                     >-</button>

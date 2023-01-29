@@ -9,7 +9,7 @@ import {
 } from 'mdb-react-ui-kit';
 
 export default function Product(product) {
-    const {selectedProducts,setSelected,totalPrice,setTotalPrice,total,setTotal}=useContext(AppContext)
+    const {dispatchTotalPrice,dispatchSelected,dispatchTotal}=useContext(AppContext)
 
     return (
         <div className='col-lg-3 col-md-4 col-sm-6 product'>
@@ -24,23 +24,9 @@ export default function Product(product) {
             {product.props.price}$
             </MDBCardText>
             <button className='btn btn-primary' onClick={()=>{
-                var found=selectedProducts.find((ele)=>{
-                    return ele.id===product.props.id
-                })
-                if(found===undefined){
-                setSelected([...selectedProducts,{...product.props,num:1}])
-                }
-                else{
-                    var newArr=selectedProducts.map(element => {
-                        if(element.id===product.props.id){
-                            return {...product.props ,num:element.num+1} 
-                        }
-                        return element
-                    });
-                    setSelected(newArr)
-                }
-                setTotalPrice((+totalPrice+product.props.price).toFixed(2))
-                setTotal(total+1)
+                dispatchSelected({type:'Increase',item:product.props})
+                dispatchTotalPrice({type:'Increase',item:product.props})
+                dispatchTotal({type:'Increase'})
             }} >Add to cart</button>
         </MDBCardBody>
         </MDBCard>
