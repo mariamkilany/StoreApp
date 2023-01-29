@@ -8,7 +8,6 @@ import { useEffect, useState , createContext } from 'react';
 export const AppContext =createContext(null);
 
 function App() {
-  const [length,setLength]=useState(0)
   const [products,setProducts]=useState([])
   const [selectedProducts,setSelected]=useState([]);
   const [total,setTotal]=useState(0);
@@ -17,7 +16,6 @@ function App() {
 
   useEffect(()=>{
     axios.get('https://fakestoreapi.com/products').then((res)=>{
-      setLength(res.data.length)
       setProducts(res.data)
     })
   },[])
